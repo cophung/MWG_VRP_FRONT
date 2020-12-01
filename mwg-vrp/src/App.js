@@ -1,8 +1,11 @@
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+import { setDefaultOptions } from "esri-loader";
 
 import "./App.css";
 import Test from "./containers/Test";
-import Header from "./containers/Header";
+import Layout from "./containers/Layout";
+
+setDefaultOptions({ css: true });
 
 function App() {
   return (
@@ -10,7 +13,7 @@ function App() {
       <div className="App">
         <Switch>
           <Route path="/test" component={Test} />
-          <Route exact path="/" component={Header} />
+          <Route exact path="/" component={Layout} />
         </Switch>
       </div>
     </Router>
