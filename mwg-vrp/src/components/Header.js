@@ -9,14 +9,10 @@ const { Header } = Layout;
 function HeaderComponent() {
   return (
     <Header style={{ padding: 0, position: "fixed", zIndex: 1, width: "100%" }}>
-      <Menu theme="light" mode="horizontal">
-        <Menu.Item key="Drivers" icon={<CarOutlined />}>
-          Drivers
-        </Menu.Item>
-        <Menu.Item key="Stops" icon={<EnvironmentOutlined />}>
-          Stops
-        </Menu.Item>
-      </Menu>
+      {/* <Menu theme="light" mode="horizontal">
+        <Menu.Item key="Drivers">Drivers</Menu.Item>
+        <Menu.Item key="Stops">Stops</Menu.Item>
+      </Menu> */}
     </Header>
   );
 }

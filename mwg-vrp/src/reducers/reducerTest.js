@@ -1,8 +1,8 @@
-import { INCREASE, DECREASE, RESET } from "../constants/test";
+import { INCREASE, DECREASE, RESET } from "../constants/constantTest";
 
 const initialState = 0;
 
-const test = (state = initialState, action) => {
+const reducerTest = (state = initialState, action) => {
   switch (action.type) {
     case INCREASE:
       return state + 1;
@@ -15,4 +15,4 @@ const test = (state = initialState, action) => {
   }
 };
 
-export default test;
+export default reducerTest;

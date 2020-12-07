@@ -1,11 +1,11 @@
 import { connect } from "react-redux";
 
 import Test from "../components/Test";
-import { increase, decrease, reset } from "../actions/test";
+import { increase, decrease, reset } from "../actions/actionTest";
 
 const mapStateToProps = (state) => {
   return {
-    counter: state.test,
+    counter: state.reducerTest,
   };
 };
 

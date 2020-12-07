@@ -1,13 +1,14 @@
 import React from "react";
 import { Layout } from "antd";
-import { Map } from "@esri/react-arcgis";
+
+import WebMapView from "../containers/WebMapView";
 
 const { Content } = Layout;
 
 function ContentComponent() {
   return (
     <Content style={{ marginTop: 64, padding: 5, height: "82vh" }}>
-      <Map />
+      <WebMapView />
     </Content>
   );
 }
