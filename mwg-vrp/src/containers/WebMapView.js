@@ -1,7 +1,7 @@
 import { connect } from "react-redux";
 
 import WebMapView from "../components/WebMapView";
-import { GET_ROUTES } from "../constants/constantRoutes";
+import { getAllRoutes } from "../actions/actionRoutes";
 
 const mapStateToProps = (state) => {
   return {
@@ -9,4 +9,12 @@ const mapStateToProps = (state) => {
   };
 };
 
-export default connect(mapStateToProps, null)(WebMapView);
+const mapDispatchToProps = (dispatch) => {
+  return {
+    getAllRoutes: () => {
+      dispatch(getAllRoutes());
+    },
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(WebMapView);

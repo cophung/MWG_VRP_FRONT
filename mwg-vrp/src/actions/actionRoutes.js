@@ -1,7 +1,7 @@
 import * as constantsRoutes from "../constants/constantRoutes";
 
-export const getRoutes = () => {
+export const getAllRoutes = () => {
   return {
-    type: constantsRoutes.GET_ROUTES,
+    type: constantsRoutes.GET_ALL_ROUTES,
   };
 };

@@ -1,10 +1,9 @@
 import React, { useEffect, useRef } from "react";
 import { loadModules } from "esri-loader";
-import axios from "axios";
 
 import "../static/css/WebMapView.css";
 
-const WebMapView = ({ routes }) => {
+const WebMapView = ({ routes, getAllRoutes }) => {
   const mapRef = useRef();
 
   useEffect(() => {
@@ -20,7 +19,7 @@ const WebMapView = ({ routes }) => {
         const view = new MapView({
           container: mapRef.current,
           map: map,
-          center: [-118, 34],
+          center: [106.775174, 10.847981],
           zoom: 8,
         });
 

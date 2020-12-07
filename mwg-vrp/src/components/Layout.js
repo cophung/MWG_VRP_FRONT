@@ -6,7 +6,7 @@ import Sider from "./Sider";
 import Content from "./Content";
 import Footer from "./Footer";
 
-function HeaderComponent() {
+function ComponentLayout() {
   return (
     <Layout>
       <Sider />
@@ -19,4 +19,4 @@ function HeaderComponent() {
   );
 }
 
-export default HeaderComponent;
+export default ComponentLayout;
