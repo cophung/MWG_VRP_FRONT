@@ -1,11 +1,11 @@
 import { combineReducers } from "redux";
 
 import reducerTest from "./reducerTest";
-import reducersRoutes from "./reducerRoutes";
+import reducerRoutes from "./reducerRoutes";
 
 const rootReducer = combineReducers({
   reducerTest,
-  reducersRoutes,
+  reducerRoutes,
 });
 
 export default rootReducer;

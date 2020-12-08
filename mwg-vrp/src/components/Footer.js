@@ -1,12 +1,12 @@
 import React from "react";
-import { Layout } from "antd";
+import { Layout, Button } from "antd";
 
 const { Footer } = Layout;
 
-function FooterComponent() {
+function FooterComponent({ routes, fetch }) {
   return (
     <Footer style={{ position: "fixed", bottom: 0, width: "100%" }}>
-      Footer
+      <Button onClick={() => fetch()}>Routing</Button>
     </Footer>
   );
 }

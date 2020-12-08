@@ -1,1 +1,1 @@
-export const GET_ALL_ROUTES = "GET_ALL_ROUTES";
+export const FETCH_ROUTES = "FETCH_ROUTES";

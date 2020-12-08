@@ -1,6 +1,6 @@
 import axios from "axios";
 
-async function getAllRoute() {
+export const serFetchRoutes = async () => {
   try {
     const response = await axios.get(
       "https://mwg-vrp.herokuapp.com/api/getRoutes"
@@ -9,6 +9,4 @@ async function getAllRoute() {
   } catch (error) {
     console.error(error);
   }
-}
-
-export default getAllRoute;
+};

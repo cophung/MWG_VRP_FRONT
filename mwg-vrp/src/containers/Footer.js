@@ -1,13 +1,7 @@
 import { connect } from "react-redux";
 
-import WebMapView from "../components/WebMapView";
+import Footer from "../components/Footer";
 import { fetchRoutes } from "../actions/actionRoutes";
-
-const mapStateToProps = (state) => {
-  return {
-    routes: state.reducerRoutes,
-  };
-};
 
 const mapDispatchToProps = (dispatch) => {
   return {
@@ -17,4 +11,4 @@ const mapDispatchToProps = (dispatch) => {
   };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(WebMapView);
+export default connect(null, mapDispatchToProps)(Footer);
