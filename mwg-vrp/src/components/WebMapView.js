@@ -1,16 +1,46 @@
 import React, { useEffect, useRef } from "react";
 import { loadModules } from "esri-loader";
 
-import "../static/css/WebMapView.css";
+import "../css/WebMapView.css";
+
+const getRandomRGB = () => (Math.random() * 256) >> 0;
 
 const WebMapView = ({ routes }) => {
   const mapRef = useRef();
 
   useEffect(() => {
-    loadModules(["esri/Map", "esri/views/MapView"], { css: true }).then(
-      ([ArcGISMap, MapView]) => {
+    loadModules(
+      [
+        "esri/Map",
+        "esri/views/MapView",
+        "esri/Graphic",
+        "esri/layers/GraphicsLayer",
+        "esri/tasks/RouteTask",
+        "esri/tasks/support/RouteParameters",
+        "esri/tasks/support/FeatureSet",
+      ],
+      { css: true }
+    ).then(
+      ([
+        ArcGISMap,
+        MapView,
+        Graphic,
+        GraphicsLayer,
+        RouteTask,
+        RouteParameters,
+        FeatureSet,
+      ]) => {
+        let routeTask = new RouteTask({
+          url:
+            "https://utility.arcgis.com/usrsvcs/appservices/IM9l55uugiQEaBPv/rest/services/World/Route/NAServer/Route_World",
+        });
+
+        // The stops and route result will be stored in this layer
+        let routeLayer = new GraphicsLayer();
+
         const map = new ArcGISMap({
           basemap: "streets-navigation-vector",
+          layers: [routeLayer], // Add the route layer to the map
         });
 
         const view = new MapView({

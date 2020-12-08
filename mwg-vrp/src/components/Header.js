@@ -1,7 +1,7 @@
 import React from "react";
 import { Layout, Menu } from "antd";
 
-import "../static/css/Header.css";
+import "../css/Header.css";
 import { CarOutlined, EnvironmentOutlined } from "@ant-design/icons";
 
 const { Header } = Layout;
