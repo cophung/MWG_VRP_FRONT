@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { loadModules } from "esri-loader";
 
 import "../css/WebMapView.css";
@@ -7,6 +7,7 @@ const getRandomRGB = () => (Math.random() * 256) >> 0;
 
 const WebMapView = ({ routes }) => {
   const mapRef = useRef();
+  const [routesState, setRoutesState] = useState(routes);
 
   useEffect(() => {
     loadModules(
@@ -57,7 +58,7 @@ const WebMapView = ({ routes }) => {
         };
       }
     );
-  }, [routes]);
+  }, [routesState]);
 
   return <div className="webmap" ref={mapRef} />;
 };
