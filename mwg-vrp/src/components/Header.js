@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import _ from "lodash";
-import { Layout, Menu, Drawer } from "antd";
+import { Layout, Menu, Drawer, Spin } from "antd";
 import { DropboxOutlined } from "@ant-design/icons";
 
 import "../css/Header.css";
@@ -38,6 +38,7 @@ const columns = [
 function HeaderComponent({ initialOrders, fetchInitialDetailOrder }) {
   const [orders, setOrders] = useState(initialOrders);
   const [visible, setVisible] = useState(false);
+  const [spinning, setSpinning] = useState(true);
 
   useEffect(() => {
     let temporaryOrders = initialOrders.map((order, index) => {
@@ -53,7 +54,9 @@ function HeaderComponent({ initialOrders, fetchInitialDetailOrder }) {
     });
 
     setOrders(temporaryOrders);
-    return () => {};
+    return () => {
+      setSpinning(false);
+    };
   }, [initialOrders]);
 
   const handleDrawer = () => {
@@ -80,12 +83,20 @@ function HeaderComponent({ initialOrders, fetchInitialDetailOrder }) {
         visible={visible}
         key="left"
         width="70%"
+        closable={true}
       >
-        <ComponentTable
-          selectionType="checkbox"
-          columns={columns}
-          data={orders}
-        />
+        <div style={{ display: "flex", justifyContent: "center" }}>
+          <Spin
+            spinning={spinning}
+            tip="Đang lấy dữ liệu, xin vui lòng chờ ..."
+          >
+            <ComponentTable
+              selectionType="checkbox"
+              columns={columns}
+              data={orders}
+            />
+          </Spin>
+        </div>
       </Drawer>
     </Header>
   );
