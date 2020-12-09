@@ -1,7 +1,7 @@
 import { connect } from "react-redux";
 
-import Footer from "../components/Footer";
-import { fetchRoutes } from "../actions/actionRoutes";
+import Footer from "../../components/Footer/Footer";
+import { fetchRoutes } from "../../actions/actionRoutes";
 
 const mapDispatchToProps = (dispatch) => {
   return {

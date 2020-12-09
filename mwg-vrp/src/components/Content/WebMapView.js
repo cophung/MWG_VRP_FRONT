@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { loadModules } from "esri-loader";
 
-import "../css/WebMapView.css";
+import "../../css/WebMapView.css";
 
 const getRandomRGB = () => (Math.random() * 256) >> 0;
 

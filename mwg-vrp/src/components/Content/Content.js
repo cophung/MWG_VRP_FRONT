@@ -1,7 +1,7 @@
 import React from "react";
 import { Layout } from "antd";
 
-import WebMapView from "../containers/WebMapView";
+import WebMapView from "../../containers/Content/WebMapView";
 
 const { Content } = Layout;
 

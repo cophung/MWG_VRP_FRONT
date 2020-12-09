@@ -1,7 +1,7 @@
 import { connect } from "react-redux";
 
-import WebMapView from "../components/WebMapView";
-import { fetchRoutes } from "../actions/actionRoutes";
+import WebMapView from "../../components/Content/WebMapView";
+import { fetchRoutes } from "../../actions/actionRoutes";
 
 const mapStateToProps = (state) => {
   return {

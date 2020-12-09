@@ -1,7 +1,7 @@
 import { connect } from "react-redux";
 
-import Header from "../components/Header";
-import { fetchInitialDetailOrders } from "../actions/actionOrders";
+import Header from "../../components/Header/Header";
+import { fetchInitialDetailOrders } from "../../actions/actionOrders";
 
 const mapStateToProps = (state) => {
   return {

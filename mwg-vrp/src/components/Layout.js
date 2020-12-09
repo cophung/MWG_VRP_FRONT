@@ -1,10 +1,10 @@
 import React from "react";
 import { Layout } from "antd";
 
-import Header from "../containers/Header";
-import Sider from "./Sider";
-import Content from "./Content";
-import Footer from "../containers/Footer";
+import Header from "../containers/Header/Header";
+import Sider from "./Sider/Sider";
+import Content from "./Content/Content";
+import Footer from "../containers/Footer/Footer";
 
 function ComponentLayout() {
   return (
