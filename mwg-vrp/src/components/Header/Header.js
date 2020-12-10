@@ -28,7 +28,7 @@ function HeaderComponent() {
         <DrawerRoutes
           onClose={() => setVisibleRoutes(false)}
           visible={visibleRoutes}
-          spinning={true}
+          spinning={false}
         />
       )}
     </Header>

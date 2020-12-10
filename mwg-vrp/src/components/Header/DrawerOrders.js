@@ -7,7 +7,7 @@ import ComponentTable from "../common/ComponentTable";
 const columns = [
   {
     title: "Số thứ tự",
-    dataIndex: "key",
+    dataIndex: "no",
   },
   {
     title: "Tên khách hàng",
@@ -48,7 +48,8 @@ function DrawerOrders({
     let temporaryOrders = initialOrders.map((order, index) => {
       let temporaryOrder = _.cloneDeep(_.omit(order, ["order"]));
       temporaryOrder = {
-        key: index + 1,
+        key: index,
+        no: index + 1,
         ...temporaryOrder,
         weight: order.order.weight,
         serviceTime: order.order.serviceTime,
@@ -66,7 +67,7 @@ function DrawerOrders({
 
   return (
     <Drawer
-      title="Orders"
+      title={`Tổng số đơn hàng: ${orders.length - 1}`}
       placement="left"
       onClose={onClose}
       visible={visible}
