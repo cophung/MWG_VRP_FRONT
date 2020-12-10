@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Drawer, Spin, Table } from "antd";
+import { Drawer, Spin, Table, Button } from "antd";
 import _ from "lodash";
 
 const createObjectMatchDataTable = (routes) => {
@@ -18,6 +18,8 @@ const createObjectMatchDataTable = (routes) => {
         weight: order.order.weight,
         serviceTime: order.order.serviceTime,
         timeWindow: `${order.order.timeWindow[0]} - ${order.order.timeWindow[1]}`,
+        long: order.order.long,
+        lat: order.order.lat,
       });
     }
     result.routes = detailRoutes;
@@ -26,24 +28,13 @@ const createObjectMatchDataTable = (routes) => {
   return newRoutes;
 };
 
-const columns = [{ title: "Tuyến đường", dataIndex: "no", key: "no" }];
-const subColumns = [
-  { title: "Tên khách hàng", dataIndex: "name", key: "name" },
-  { title: "Địa chỉ", dataIndex: "place", key: "place" },
-  { title: "Cân nặng (kg)", dataIndex: "weight", key: "weight" },
-  {
-    title: "Thời gian phục vụ (h)",
-    dataIndex: "serviceTime",
-    key: "serviceTime",
-  },
-  {
-    title: "Thời gian nhận hàng (h)",
-    dataIndex: "timeWindow",
-    key: "timeWindow",
-  },
-];
-
-function DrawerRoutes({ routes, fetchRoutes, onClose, visible }) {
+function DrawerRoutes({
+  routes,
+  fetchRoutes,
+  handleSubRoute,
+  onClose,
+  visible,
+}) {
   const [stateRoutes, setStateRoutes] = useState([]);
   const [spinning, setSpinning] = useState(true);
 
@@ -58,6 +49,64 @@ function DrawerRoutes({ routes, fetchRoutes, onClose, visible }) {
       setSpinning(false);
     };
   }, [routes]);
+
+  const columns = [
+    { title: "Tuyến đường", dataIndex: "no", key: "no" },
+    {
+      title: "Routing",
+      key: "routing",
+      fixed: "right",
+      width: 100,
+      render: (record, index) => (
+        <Button
+          type="primary"
+          loading={false}
+          onClick={() => {
+            const depot = routes[0][0]; // lay thong tin order kho
+            const temponaryDepot = {
+              long: depot.order.long,
+              lat: depot.order.lat,
+              name: "Kho",
+              place: depot.place,
+              serviceTime: depot.order.serviceTime,
+              timeWindow: depot.order.timeWindow,
+              weight: depot.order.weight,
+            };
+
+            let temponaryRoutes = record.routes.map((item) => {
+              return _.omit(item, ["key"]);
+            });
+            // console.log(temponaryRoutes, depot);
+            temponaryRoutes = [
+              temponaryDepot,
+              ...temponaryRoutes,
+              temponaryDepot,
+            ];
+
+            handleSubRoute(temponaryRoutes);
+          }}
+        >
+          Routing
+        </Button>
+      ),
+    },
+  ];
+
+  const subColumns = [
+    { title: "Tên khách hàng", dataIndex: "name", key: "name" },
+    { title: "Địa chỉ", dataIndex: "place", key: "place" },
+    { title: "Cân nặng (kg)", dataIndex: "weight", key: "weight" },
+    {
+      title: "Thời gian phục vụ (h)",
+      dataIndex: "serviceTime",
+      key: "serviceTime",
+    },
+    {
+      title: "Thời gian nhận hàng (h)",
+      dataIndex: "timeWindow",
+      key: "timeWindow",
+    },
+  ];
 
   return (
     <Drawer

@@ -1,7 +1,7 @@
 import { connect } from "react-redux";
 
 import DrawerRoutes from "../../components/Header/DrawerRoutes";
-import { fetchRoutes } from "../../actions/actionRoutes";
+import { fetchRoutes, actionSubRoutes } from "../../actions/actionRoutes";
 
 const mapStateToProps = (state) => {
   return {
@@ -13,6 +13,9 @@ const mapDispatchToProps = (dispatch) => {
   return {
     fetchRoutes: () => {
       dispatch(fetchRoutes());
+    },
+    handleSubRoute: (data) => {
+      dispatch(actionSubRoutes(data));
     },
   };
 };

@@ -17,3 +17,10 @@ export function fetchRoutes() {
       .catch((error) => console.log("FetchRoutes Axios Error", error));
   };
 }
+
+export const actionSubRoutes = (data) => {
+  return {
+    type: constantsRoutes.GET_SUB_ROUTE_IN_ORIGINAL_ROUTES,
+    payload: data,
+  };
+};

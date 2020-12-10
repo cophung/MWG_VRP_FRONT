@@ -5,9 +5,8 @@ import "../../css/WebMapView.css";
 
 const getRandomRGB = () => (Math.random() * 256) >> 0;
 
-const WebMapView = ({ routes }) => {
+const WebMapView = ({ subRoutes }) => {
   const mapRef = useRef();
-  const [routesState, setRoutesState] = useState(routes);
 
   useEffect(() => {
     loadModules(
@@ -36,12 +35,17 @@ const WebMapView = ({ routes }) => {
             "https://utility.arcgis.com/usrsvcs/appservices/IM9l55uugiQEaBPv/rest/services/World/Route/NAServer/Route_World",
         });
 
-        // The stops and route result will be stored in this layer
         let routeLayer = new GraphicsLayer();
+        let routeParams = new RouteParameters({
+          stops: new FeatureSet(),
+          outSpatialReference: {
+            wkid: 3857,
+          },
+        });
 
         const map = new ArcGISMap({
           basemap: "streets-navigation-vector",
-          layers: [routeLayer], // Add the route layer to the map
+          layers: [routeLayer],
         });
 
         const view = new MapView({
@@ -51,6 +55,115 @@ const WebMapView = ({ routes }) => {
           zoom: 8,
         });
 
+        for (let i = 0; i < subRoutes.length; i++) {
+          const element = subRoutes[i];
+
+          const pointAtt = {
+            Name: element.name,
+            Weight: `${element.weight} kg`,
+            ServiceTime: `${element.serviceTime}h`,
+            TimeWindow: element.timeWindow,
+          };
+
+          let popupTemplate = {};
+
+          if (i !== 0 && i !== subRoutes.length - 1) {
+            popupTemplate = {
+              content: [
+                {
+                  type: "fields",
+                  fieldInfos: [
+                    {
+                      fieldName: "Name",
+                      label: "Tên khách hàng",
+                    },
+                    {
+                      fieldName: "Weight",
+                      label: "Cân nặng",
+                    },
+                    {
+                      fieldName: "ServiceTime",
+                      label: "Thời gian phục vụ",
+                    },
+                    {
+                      fieldName: "TimeWindow",
+                      label: "Thời gian khách nhận hàng (h)",
+                    },
+                  ],
+                },
+              ],
+            };
+          } else {
+            popupTemplate = {
+              content: [
+                {
+                  type: "fields",
+                  fieldInfos: [
+                    {
+                      fieldName: "Name",
+                      label: "Tên khách hàng",
+                    },
+                    {
+                      fieldName: "TimeWindow",
+                      label: "Thời gian phục vụ (h)",
+                    },
+                  ],
+                },
+              ],
+            };
+            pointAtt.TimeWindow = `${element.timeWindow[0]} - ${element.timeWindow[1]}`;
+          }
+
+          const symbol = {
+            type: "text",
+            color: "green",
+            haloColor: "black",
+            haloSize: "1px",
+            text: i === 0 || i === subRoutes.length - 1 ? "Kho" : i,
+            xoffset: 3,
+            yoffset: 3,
+            font: {
+              size: 12,
+              family: "sans-serif",
+              weight: "bold",
+            },
+          };
+
+          const geometry = {
+            type: "point",
+            longitude: element.long,
+            latitude: element.lat,
+          };
+
+          const stop = new Graphic({
+            geometry,
+            symbol,
+            attributes: pointAtt,
+            popupTemplate,
+          });
+
+          //Khong them trung lap depot
+          if (i !== subRoutes.length - 1) {
+            routeLayer.add(stop);
+          }
+
+          routeParams.stops.features.push(stop);
+        }
+
+        const showRoute = (data) => {
+          let routeResult = data.routeResults[0].route;
+          routeResult.symbol = {
+            type: "simple-line",
+            join: "bevel",
+            cap: "butt",
+            color: [0, 0, 255, 0.3],
+            width: 4,
+          };
+          routeLayer.add(routeResult);
+        };
+
+        routeTask.solve(routeParams).then(showRoute);
+
         return () => {
           if (view) {
             view.destroy();
@@ -58,7 +171,7 @@ const WebMapView = ({ routes }) => {
         };
       }
     );
-  }, [routesState]);
+  }, [subRoutes]);
 
   return <div className="webmap" ref={mapRef} />;
 };
