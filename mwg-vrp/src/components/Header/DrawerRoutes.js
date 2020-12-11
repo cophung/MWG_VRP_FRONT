@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Drawer, Spin, Table, Button } from "antd";
 import _ from "lodash";
 
-let columns = [
+const columns = [
   { title: "Tuyến đường", dataIndex: "key", key: "key" },
   {
     title: "Số khách hàng",

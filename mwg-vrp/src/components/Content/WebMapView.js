@@ -5,11 +5,7 @@ import "../../css/WebMapView.css";
 
 const getRandomRGB = () => (Math.random() * 256) >> 0;
 
-const WebMapView = ({
-  subRoutes,
-  statusRouting,
-  completeProcessingRouting,
-}) => {
+const WebMapView = ({ subRoutes, completeProcessingRouting }) => {
   const mapRef = useRef();
 
   useEffect(() => {
@@ -169,7 +165,6 @@ const WebMapView = ({
         routeTask.solve(routeParams).then(showRoute);
 
         return () => {
-          completeProcessingRouting();
           if (view) {
             view.destroy();
           }
@@ -182,7 +177,7 @@ const WebMapView = ({
     return () => {
       completeProcessingRouting();
     };
-  });
+  }, [subRoutes]);
 
   return <div className="webmap" ref={mapRef} />;
 };
