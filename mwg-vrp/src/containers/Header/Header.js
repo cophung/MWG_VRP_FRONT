@@ -2,10 +2,15 @@ import { connect } from "react-redux";
 
 import Header from "../../components/Header/Header";
 import { fetchInitialDetailOrders } from "../../actions/actionOrders";
+import {
+  processingRouting,
+  completeProcessingRouting,
+} from "../../actions/actionRoutes";
 
 const mapStateToProps = (state) => {
   return {
     initialOrders: state.reducerOrders,
+    statusRouting: state.statusRouting,
   };
 };
 

@@ -1,11 +1,16 @@
 import { connect } from "react-redux";
 
 import DrawerRoutes from "../../components/Header/DrawerRoutes";
-import { fetchRoutes, actionSubRoutes } from "../../actions/actionRoutes";
+import {
+  fetchRoutes,
+  actionSubRoutes,
+  processingRouting,
+} from "../../actions/actionRoutes";
 
 const mapStateToProps = (state) => {
   return {
     routes: state.reducerRoutes,
+    statusRouting: state.statusRouting,
   };
 };
 
@@ -16,6 +21,9 @@ const mapDispatchToProps = (dispatch) => {
     },
     handleSubRoute: (data) => {
       dispatch(actionSubRoutes(data));
+    },
+    processingRouting: () => {
+      dispatch(processingRouting());
     },
   };
 };

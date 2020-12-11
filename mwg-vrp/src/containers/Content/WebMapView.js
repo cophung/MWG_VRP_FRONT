@@ -1,12 +1,16 @@
 import { connect } from "react-redux";
 
 import WebMapView from "../../components/Content/WebMapView";
-import { fetchRoutes } from "../../actions/actionRoutes";
+import {
+  fetchRoutes,
+  completeProcessingRouting,
+} from "../../actions/actionRoutes";
 
 const mapStateToProps = (state) => {
   return {
     routes: state.reducerRoutes,
     subRoutes: state.reducerSubRoutes,
+    statusRouting: state.statusRouting,
   };
 };
 
@@ -14,6 +18,9 @@ const mapDispatchToProps = (dispatch) => {
   return {
     fetch: () => {
       dispatch(fetchRoutes());
+    },
+    completeProcessingRouting: () => {
+      dispatch(completeProcessingRouting());
     },
   };
 };

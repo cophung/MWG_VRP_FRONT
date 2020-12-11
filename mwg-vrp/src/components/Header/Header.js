@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Layout } from "antd";
 
 import "../../css/Header.css";
@@ -8,9 +8,16 @@ import DrawerRoutes from "../../containers/Header/DrawerRoutes";
 
 const { Header } = Layout;
 
-function HeaderComponent() {
+function HeaderComponent({ statusRouting }) {
   const [visibleOrders, setVisibleOrders] = useState(false);
   const [visibleRoutes, setVisibleRoutes] = useState(false);
+
+  useEffect(() => {
+    setTimeout(() => {
+      setVisibleRoutes(statusRouting);
+    }, 1000);
+    return () => {};
+  }, [statusRouting]);
 
   return (
     <Header style={{ padding: 0, position: "fixed", zIndex: 1, width: "100%" }}>
@@ -18,19 +25,14 @@ function HeaderComponent() {
         handleTabOrders={() => setVisibleOrders(true)}
         handleTabRoutes={() => setVisibleRoutes(true)}
       />
-      {visibleOrders && (
-        <DrawerOrders
-          onClose={() => setVisibleOrders(false)}
-          visible={visibleOrders}
-        />
-      )}
-      {visibleRoutes && (
-        <DrawerRoutes
-          onClose={() => setVisibleRoutes(false)}
-          visible={visibleRoutes}
-          spinning={false}
-        />
-      )}
+      <DrawerOrders
+        onClose={() => setVisibleOrders(false)}
+        visible={visibleOrders}
+      />
+      <DrawerRoutes
+        onClose={() => setVisibleRoutes(false)}
+        visible={visibleRoutes}
+      />
     </Header>
   );
 }

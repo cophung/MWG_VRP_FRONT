@@ -24,3 +24,15 @@ export const actionSubRoutes = (data) => {
     payload: data,
   };
 };
+
+export const processingRouting = () => {
+  return {
+    type: constantsRoutes.PROCESSING_ROUTING,
+  };
+};
+
+export const completeProcessingRouting = () => {
+  return {
+    type: constantsRoutes.COMPLETE_PROCESSING_ROUTING,
+  };
+};

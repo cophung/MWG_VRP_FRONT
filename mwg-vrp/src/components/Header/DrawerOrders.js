@@ -1,13 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { Drawer, Spin } from "antd";
-import _ from "lodash";
-
-import ComponentTable from "../common/ComponentTable";
+import { Drawer, Spin, Table } from "antd";
 
 const columns = [
   {
     title: "Số thứ tự",
-    dataIndex: "no",
+    dataIndex: "key",
   },
   {
     title: "Tên khách hàng",
@@ -26,10 +23,31 @@ const columns = [
     dataIndex: "serviceTime",
   },
   {
-    title: "Thời gian khách nhận hàng",
+    title: "Thời gian khách nhận hàng (h)",
     dataIndex: "timeWindow",
   },
 ];
+
+const convertDataToMatchFormTable = (orders) => {
+  let resultData = orders.map((order, index) => {
+    const { id, name, place } = order;
+    const { weight, serviceTime, timeWindow, long, lat } = order.order;
+
+    return {
+      key: index + 1,
+      id,
+      name,
+      place,
+      weight,
+      serviceTime,
+      timeWindow: `${timeWindow[0]} - ${timeWindow[1]}`,
+      long,
+      lat,
+    };
+  });
+
+  return resultData;
+};
 
 function DrawerOrders({
   initialOrders,
@@ -45,20 +63,8 @@ function DrawerOrders({
   }, [fetchInitialDetailOrder]);
 
   useEffect(() => {
-    let temporaryOrders = initialOrders.map((order, index) => {
-      let temporaryOrder = _.cloneDeep(_.omit(order, ["order"]));
-      temporaryOrder = {
-        key: index,
-        no: index + 1,
-        ...temporaryOrder,
-        weight: order.order.weight,
-        serviceTime: order.order.serviceTime,
-        timeWindow: `${order.order.timeWindow[0]}h - ${order.order.timeWindow[1]}h`,
-      };
-      return temporaryOrder;
-    });
-
-    setOrders(temporaryOrders);
+    const orders = convertDataToMatchFormTable(initialOrders);
+    setOrders(orders);
 
     return () => {
       setSpinning(false);
@@ -69,18 +75,24 @@ function DrawerOrders({
     <Drawer
       title={`Tổng số đơn hàng: ${orders.length - 1}`}
       placement="left"
-      onClose={onClose}
-      visible={visible}
       key="left"
       width="70%"
+      onClose={onClose}
+      visible={visible}
       closable={true}
     >
       <div style={{ display: "flex", justifyContent: "center" }}>
         <Spin spinning={spinning} tip="Đang lấy dữ liệu, xin vui lòng chờ ...">
-          <ComponentTable
-            selectionType="checkbox"
+          <Table
+            rowSelection={{
+              type: "checkbox",
+              getCheckboxProps: (record) => ({
+                name: record.name,
+              }),
+            }}
             columns={columns}
-            data={orders}
+            dataSource={orders}
+            scroll={{ y: 450 }}
           />
         </Spin>
       </div>

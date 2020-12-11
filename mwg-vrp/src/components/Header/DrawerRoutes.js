@@ -32,6 +32,7 @@ function DrawerRoutes({
   routes,
   fetchRoutes,
   handleSubRoute,
+  processingRouting,
   onClose,
   visible,
 }) {
@@ -62,6 +63,7 @@ function DrawerRoutes({
           type="primary"
           loading={false}
           onClick={() => {
+            processingRouting();
             const depot = routes[0][0]; // lay thong tin order kho
             const temponaryDepot = {
               long: depot.order.long,
@@ -76,12 +78,12 @@ function DrawerRoutes({
             let temponaryRoutes = record.routes.map((item) => {
               return _.omit(item, ["key"]);
             });
-            // console.log(temponaryRoutes, depot);
             temponaryRoutes = [
               temponaryDepot,
               ...temponaryRoutes,
               temponaryDepot,
             ];
+            console.log(temponaryRoutes);
 
             handleSubRoute(temponaryRoutes);
           }}
