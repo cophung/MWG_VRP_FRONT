@@ -2,30 +2,101 @@ import React, { useEffect, useState } from "react";
 import { Drawer, Spin, Table, Button } from "antd";
 import _ from "lodash";
 
-const createObjectMatchDataTable = (routes) => {
+let columns = [
+  { title: "Tuyến đường", dataIndex: "key", key: "key" },
+  {
+    title: "Số khách hàng",
+    dataIndex: "totalCustomers",
+    key: "totalCustomers",
+  },
+  {
+    title: "Tổng cân nặng (kg)",
+    dataIndex: "totalWeight",
+    key: "totalWeight",
+  },
+];
+
+const subColumns = [
+  { title: "Tên khách hàng", dataIndex: "name", key: "name" },
+  { title: "Địa chỉ", dataIndex: "place", key: "place" },
+  { title: "Cân nặng (kg)", dataIndex: "weight", key: "weight" },
+  {
+    title: "Thời gian phục vụ (h)",
+    dataIndex: "serviceTime",
+    key: "serviceTime",
+  },
+  {
+    title: "Thời gian nhận hàng (h)",
+    dataIndex: "timeWindow",
+    key: "timeWindow",
+  },
+];
+
+const convertDataMatchFormTable = (routes) => {
   let newRoutes = [];
+
   for (let i = 0; i < routes.length; i++) {
     const subRoutes = routes[i];
-    let result = { key: i, no: i + 1 };
     const detailRoutes = [];
 
     for (let j = 1; j < subRoutes.length - 1; j++) {
       const order = subRoutes[j];
+      const { id, name, place } = order;
+      const { long, lat, serviceTime, timeWindow, weight } = order.order;
+
       detailRoutes.push({
         key: j,
-        name: order.name,
-        place: order.place,
-        weight: order.order.weight,
-        serviceTime: order.order.serviceTime,
-        timeWindow: `${order.order.timeWindow[0]} - ${order.order.timeWindow[1]}`,
-        long: order.order.long,
-        lat: order.order.lat,
+        id,
+        name,
+        place,
+        weight,
+        serviceTime,
+        timeWindow: `${timeWindow[0]} - ${timeWindow[1]}`,
+        long,
+        lat,
       });
     }
-    result.routes = detailRoutes;
-    newRoutes.push(result);
+
+    let totalWeight = 0;
+    detailRoutes.forEach((order) => (totalWeight += order.weight));
+
+    newRoutes.push({
+      key: i + 1,
+      totalCustomers: detailRoutes.length,
+      totalWeight,
+      routes: detailRoutes,
+    });
   }
+
   return newRoutes;
+};
+
+const convertDataDepotMatchFormTable = (routes, dataInRow) => {
+  const depot = routes[0][0];
+  const { id, place } = depot;
+  const { weight, long, lat, serviceTime, timeWindow } = depot.order;
+
+  const cloneDepot = {
+    id,
+    name: "Kho",
+    place,
+    weight,
+    serviceTime,
+    timeWindow,
+    long,
+    lat,
+  };
+
+  const temponaryRoutes = dataInRow.routes.map((item) => {
+    const order = _.omit(item, ["key"]);
+    const { timeWindow } = order;
+    order.timeWindow = timeWindow.split("-").map(Number);
+    return order;
+  });
+
+  const resultRoutes = [cloneDepot, ...temponaryRoutes, cloneDepot];
+
+  return resultRoutes;
 };
 
 function DrawerRoutes({
@@ -44,17 +115,16 @@ function DrawerRoutes({
   }, [fetchRoutes]);
 
   useEffect(() => {
-    const temponaryRoutes = createObjectMatchDataTable(routes);
-    setStateRoutes(temponaryRoutes);
+    const data = convertDataMatchFormTable(routes);
+    setStateRoutes(data);
     return () => {
       setSpinning(false);
     };
   }, [routes]);
 
-  const columns = [
-    { title: "Tuyến đường", dataIndex: "no", key: "no" },
+  const parentColumns = [
+    ...columns,
     {
-      title: "Routing",
       key: "routing",
       fixed: "right",
       width: 100,
@@ -64,60 +134,28 @@ function DrawerRoutes({
           loading={false}
           onClick={() => {
             processingRouting();
-            const depot = routes[0][0]; // lay thong tin order kho
-            const temponaryDepot = {
-              long: depot.order.long,
-              lat: depot.order.lat,
-              name: "Kho",
-              place: depot.place,
-              serviceTime: depot.order.serviceTime,
-              timeWindow: depot.order.timeWindow,
-              weight: depot.order.weight,
-            };
-
-            let temponaryRoutes = record.routes.map((item) => {
-              return _.omit(item, ["key"]);
-            });
-            temponaryRoutes = [
-              temponaryDepot,
-              ...temponaryRoutes,
-              temponaryDepot,
-            ];
-            console.log(temponaryRoutes);
-
+            const temponaryRoutes = convertDataDepotMatchFormTable(
+              routes,
+              record
+            );
             handleSubRoute(temponaryRoutes);
           }}
         >
-          Routing
+          Xem chỉ đường
         </Button>
       ),
     },
   ];
-
-  const subColumns = [
-    { title: "Tên khách hàng", dataIndex: "name", key: "name" },
-    { title: "Địa chỉ", dataIndex: "place", key: "place" },
-    { title: "Cân nặng (kg)", dataIndex: "weight", key: "weight" },
-    {
-      title: "Thời gian phục vụ (h)",
-      dataIndex: "serviceTime",
-      key: "serviceTime",
-    },
-    {
-      title: "Thời gian nhận hàng (h)",
-      dataIndex: "timeWindow",
-      key: "timeWindow",
-    },
-  ];
+  const childrenColumns = [...subColumns];
 
   return (
     <Drawer
       title={`Tổng số tuyến: ${stateRoutes.length}`}
       placement="left"
-      onClose={onClose}
-      visible={visible}
       key="left"
       width="70%"
+      onClose={onClose}
+      visible={visible}
       closable={true}
     >
       <div style={{ display: "flex", justifyContent: "center" }}>
@@ -127,12 +165,12 @@ function DrawerRoutes({
             tip="Đang lấy dữ liệu, xin vui lòng chờ ..."
           >
             <Table
-              columns={columns}
+              columns={parentColumns}
               dataSource={stateRoutes}
               expandable={{
                 expandedRowRender: (record) => (
                   <Table
-                    columns={subColumns}
+                    columns={childrenColumns}
                     dataSource={record.routes}
                     pagination={false}
                   />
