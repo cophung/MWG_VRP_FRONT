@@ -101,7 +101,6 @@ const convertDataDepotMatchFormTable = (routes, dataInRow) => {
 
 function DrawerRoutes({
   routes,
-  fetchRoutes,
   handleSubRoute,
   processingRouting,
   onClose,
@@ -109,10 +108,6 @@ function DrawerRoutes({
 }) {
   const [stateRoutes, setStateRoutes] = useState([]);
   const [spinning, setSpinning] = useState(true);
-
-  useEffect(() => {
-    fetchRoutes();
-  }, [fetchRoutes]);
 
   useEffect(() => {
     const data = convertDataMatchFormTable(routes);

@@ -116,14 +116,16 @@ const WebMapView = ({ subRoutes, completeProcessingRouting }) => {
 
           const symbol = {
             type: "text",
-            color: "green",
+            color:
+              i === 0 || i === subRoutes.length - 1 ? "yellow" : "yellowgreen",
             haloColor: "black",
             haloSize: "1px",
             text: i === 0 || i === subRoutes.length - 1 ? "Kho" : i,
             xoffset: 3,
             yoffset: 3,
             font: {
-              size: 12,
+              size: i === 0 || i === subRoutes.length - 1 ? 16 : 14,
+              outline: 0,
               family: "sans-serif",
               weight: "bold",
             },

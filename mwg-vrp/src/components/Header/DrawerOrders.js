@@ -49,18 +49,9 @@ const convertDataToMatchFormTable = (orders) => {
   return resultData;
 };
 
-function DrawerOrders({
-  initialOrders,
-  fetchInitialDetailOrder,
-  onClose,
-  visible,
-}) {
+function DrawerOrders({ initialOrders, onClose, visible }) {
   const [orders, setOrders] = useState([]);
   const [spinning, setSpinning] = useState(true);
-
-  useEffect(() => {
-    fetchInitialDetailOrder();
-  }, [fetchInitialDetailOrder]);
 
   useEffect(() => {
     const orders = convertDataToMatchFormTable(initialOrders);

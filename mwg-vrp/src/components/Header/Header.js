@@ -8,9 +8,19 @@ import DrawerRoutes from "../../containers/Header/DrawerRoutes";
 
 const { Header } = Layout;
 
-function HeaderComponent({ statusRouting }) {
+function HeaderComponent({
+  statusRouting,
+  fetchInitialDetailOrder,
+  fetchRoutes,
+}) {
   const [visibleOrders, setVisibleOrders] = useState(false);
   const [visibleRoutes, setVisibleRoutes] = useState(false);
+
+  useEffect(() => {
+    fetchInitialDetailOrder();
+    fetchRoutes();
+    return () => {};
+  }, [fetchInitialDetailOrder, fetchRoutes]);
 
   useEffect(() => {
     setTimeout(() => {

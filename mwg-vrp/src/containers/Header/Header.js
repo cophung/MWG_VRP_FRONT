@@ -2,10 +2,8 @@ import { connect } from "react-redux";
 
 import Header from "../../components/Header/Header";
 import { fetchInitialDetailOrders } from "../../actions/actionOrders";
-import {
-  processingRouting,
-  completeProcessingRouting,
-} from "../../actions/actionRoutes";
+
+import { fetchRoutes } from "../../actions/actionRoutes";
 
 const mapStateToProps = (state) => {
   return {
@@ -18,6 +16,9 @@ const mapDispatchToProps = (dispatch) => {
   return {
     fetchInitialDetailOrder: () => {
       dispatch(fetchInitialDetailOrders());
+    },
+    fetchRoutes: () => {
+      dispatch(fetchRoutes());
     },
   };
 };
