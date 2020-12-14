@@ -5,6 +5,12 @@ const serviceProxy =
 const baseMap = "streets-navigation-vector";
 const centerMap = [106.775174, 10.847981];
 
+const randomColorRgba = () => {
+  const r = () => (Math.random() * 256) >> 0;
+  const color = `rgba(${r()}, ${r()}, ${r()}, 0.3)`;
+  return color;
+};
+
 const handlePopupTemplate = (kind) => {
   switch (kind) {
     case "customer":
@@ -261,6 +267,13 @@ export const handleAllRoutes = (mapRef, routes) => {
           wkid: 3857,
         },
       });
+      let routeParams1 = new RouteParameters({
+        stops: new FeatureSet(),
+        outSpatialReference: {
+          wkid: 3857,
+        },
+      });
+
       const map = new ArcGISMap({
         basemap: baseMap,
         layers: [routeLayer],
@@ -310,7 +323,18 @@ export const handleAllRoutes = (mapRef, routes) => {
         });
 
         routeLayer.add(stop);
-        routeParams.stops.features.push(stop);
+      };
+
+      const showRoute = (data) => {
+        let routeResult = data.routeResults[0].route;
+        routeResult.symbol = {
+          type: "simple-line",
+          join: "bevel",
+          cap: "butt",
+          color: randomColorRgba(),
+          width: 4,
+        };
+        routeLayer.add(routeResult);
       };
 
       if (routes.length !== 0) {
@@ -359,21 +383,7 @@ export const handleAllRoutes = (mapRef, routes) => {
             routeParams.stops.features.push(stop);
           });
         });
-      }
 
-      const showRoute = (data) => {
-        let routeResult = data.routeResults[0].route;
-        routeResult.symbol = {
-          type: "simple-line",
-          join: "bevel",
-          cap: "butt",
-          color: [0, 150, 150, 0.3],
-          width: 4,
-        };
-        routeLayer.add(routeResult);
-      };
-
-      if (routes.length !== 0) {
         routeTask.solve(routeParams).then(showRoute);
       }
 

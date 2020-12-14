@@ -17,7 +17,9 @@ const WebMapView = ({
   }, [subRoutes]);
 
   useEffect(() => {
-    handleAllRoutes(mapRef, allRoutes);
+    if (allRoutes.length !== 0) {
+      handleAllRoutes(mapRef, allRoutes);
+    }
     return () => {};
   }, [allRoutes]);
 
