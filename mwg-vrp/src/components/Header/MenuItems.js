@@ -7,14 +7,15 @@ function MenuItems({ handleTabOrders, handleTabRoutes }) {
     <Menu theme="light" mode="horizontal">
       <Menu.Item
         key="orders"
+        title="Danh sách Order"
         icon={<DropboxOutlined />}
         onClick={handleTabOrders}
-        title="Chi tiet order"
       >
         Orders
       </Menu.Item>
       <Menu.Item
         key="routes"
+        title="Danh sách tuyến đường"
         icon={<EnterOutlined />}
         onClick={handleTabRoutes}
       >

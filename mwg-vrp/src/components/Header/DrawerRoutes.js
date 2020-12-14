@@ -102,6 +102,7 @@ const convertDataDepotMatchFormTable = (routes, dataInRow) => {
 function DrawerRoutes({
   routes,
   handleSubRoute,
+  handleRoutes,
   processingRouting,
   onClose,
   visible,
@@ -121,11 +122,24 @@ function DrawerRoutes({
     ...columns,
     {
       key: "routing",
-      fixed: "right",
       width: 100,
+      title: () => {
+        return (
+          <Button
+            type="primary"
+            block={true}
+            onClick={() => {
+              handleRoutes(routes);
+            }}
+          >
+            Xem tất cả
+          </Button>
+        );
+      },
       render: (record, index) => (
         <Button
           type="primary"
+          block={true}
           loading={false}
           onClick={() => {
             processingRouting();

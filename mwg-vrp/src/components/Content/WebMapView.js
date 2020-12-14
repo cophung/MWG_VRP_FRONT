@@ -1,11 +1,11 @@
 import React, { useEffect, useRef, useState } from "react";
 
 import "../../css/WebMapView.css";
-import { handleSubRoutes } from "../../library/map";
+import { handleSubRoutes, handleAllRoutes } from "../../library/map";
 
-const WebMapView = ({ subRoutes, completeProcessingRouting }) => {
+const WebMapView = ({ subRoutes, allRoutes, completeProcessingRouting }) => {
   const mapRef = useRef();
-
+  console.log("All routes: ", allRoutes);
   useEffect(() => {
     handleSubRoutes(mapRef, subRoutes);
     return () => {

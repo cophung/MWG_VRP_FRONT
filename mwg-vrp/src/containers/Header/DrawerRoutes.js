@@ -4,6 +4,7 @@ import DrawerRoutes from "../../components/Header/DrawerRoutes";
 import {
   fetchRoutes,
   actionSubRoutes,
+  actionRoutes,
   processingRouting,
 } from "../../actions/actionRoutes";
 
@@ -21,6 +22,9 @@ const mapDispatchToProps = (dispatch) => {
     },
     handleSubRoute: (data) => {
       dispatch(actionSubRoutes(data));
+    },
+    handleRoutes: (data) => {
+      dispatch(actionRoutes(data));
     },
     processingRouting: () => {
       dispatch(processingRouting());

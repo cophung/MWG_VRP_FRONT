@@ -160,3 +160,5 @@ export const handleSubRoutes = (mapRef, subRoutes) => {
     }
   );
 };
+
+export const handleAllRoutes = () => {};

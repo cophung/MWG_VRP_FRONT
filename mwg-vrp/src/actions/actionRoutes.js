@@ -25,6 +25,13 @@ export const actionSubRoutes = (data) => {
   };
 };
 
+export const actionRoutes = (data) => {
+  return {
+    type: constantsRoutes.GET_ALL_ROUTES,
+    payload: data,
+  };
+};
+
 export const processingRouting = () => {
   return {
     type: constantsRoutes.PROCESSING_ROUTING,

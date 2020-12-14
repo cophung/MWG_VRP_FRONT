@@ -10,6 +10,7 @@ const mapStateToProps = (state) => {
   return {
     routes: state.reducerRoutes,
     subRoutes: state.reducerSubRoutes,
+    allRoutes: state.reducerAllRoutes,
     statusRouting: state.statusRouting,
   };
 };
