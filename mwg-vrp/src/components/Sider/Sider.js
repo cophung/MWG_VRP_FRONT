@@ -1,6 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { Layout, Menu } from "antd";
+import { Layout } from "antd";
 import { CarOutlined } from "@ant-design/icons";
 
 const { Sider } = Layout;
