@@ -7,7 +7,7 @@ import { fetchRoutes } from "../../actions/actionRoutes";
 
 const mapStateToProps = (state) => {
   return {
-    initialOrders: state.reducerOrders,
+    initialOrders: state.reducerFetchOrders,
     statusRouting: state.statusRouting,
   };
 };

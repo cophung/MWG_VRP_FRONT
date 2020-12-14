@@ -10,7 +10,7 @@ import {
 
 const mapStateToProps = (state) => {
   return {
-    routes: state.reducerRoutes,
+    routes: state.reducerFetchRoutes,
     statusRouting: state.statusRouting,
   };
 };

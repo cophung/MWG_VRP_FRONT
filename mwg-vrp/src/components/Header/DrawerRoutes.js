@@ -129,7 +129,9 @@ function DrawerRoutes({
             type="primary"
             block={true}
             onClick={() => {
-              handleRoutes(routes);
+              processingRouting();
+              const a = [...routes]; //xet tam
+              handleRoutes(a);
             }}
           >
             Xem tất cả

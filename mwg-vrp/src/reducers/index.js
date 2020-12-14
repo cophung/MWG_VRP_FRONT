@@ -1,16 +1,16 @@
 import { combineReducers } from "redux";
 
 import reducerTest from "./reducerTest";
-import reducerRoutes from "./reducerRoutes";
-import reducerOrders from "./reducerOrders";
+import reducerFetchRoutes from "./reducerFetchRoutes";
+import reducerFetchOrders from "./reducerFetchOrders";
 import reducerSubRoutes from "./reducerSubRoutes";
 import reducerAllRoutes from "./reducerAllRoutes";
 import { statusRouting } from "./reducerStatus";
 
 const rootReducer = combineReducers({
   reducerTest,
-  reducerRoutes,
-  reducerOrders,
+  reducerFetchRoutes,
+  reducerFetchOrders,
   reducerSubRoutes,
   reducerAllRoutes,
   statusRouting,

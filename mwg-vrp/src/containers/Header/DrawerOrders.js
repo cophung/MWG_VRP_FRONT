@@ -5,7 +5,7 @@ import { fetchInitialDetailOrders } from "../../actions/actionOrders";
 
 const mapStateToProps = (state) => {
   return {
-    initialOrders: state.reducerOrders,
+    initialOrders: state.reducerFetchOrders,
   };
 };
 

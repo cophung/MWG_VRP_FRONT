@@ -8,7 +8,7 @@ import {
 
 const mapStateToProps = (state) => {
   return {
-    routes: state.reducerRoutes,
+    routes: state.reducerFetchRoutes,
     subRoutes: state.reducerSubRoutes,
     allRoutes: state.reducerAllRoutes,
     statusRouting: state.statusRouting,

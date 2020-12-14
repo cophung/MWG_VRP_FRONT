@@ -2,7 +2,7 @@ import _ from "lodash";
 
 import { FETCH_ROUTES } from "../constants/constantRoutes";
 
-const reducersRoutes = (state = [], action) => {
+const reducerFetchRoutes = (state = [], action) => {
   switch (action.type) {
     case FETCH_ROUTES:
       return _.cloneDeep(action.payload);
@@ -11,4 +11,4 @@ const reducersRoutes = (state = [], action) => {
   }
 };
 
-export default reducersRoutes;
+export default reducerFetchRoutes;
