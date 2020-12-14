@@ -3,22 +3,29 @@ import React, { useEffect, useRef, useState } from "react";
 import "../../css/WebMapView.css";
 import { handleSubRoutes, handleAllRoutes } from "../../library/mapView";
 
-const WebMapView = ({ subRoutes, allRoutes, completeProcessingRouting }) => {
+const WebMapView = ({
+  subRoutes,
+  allRoutes,
+  statusRouting,
+  completeProcessingRouting,
+}) => {
   const mapRef = useRef();
 
   useEffect(() => {
     handleSubRoutes(mapRef, subRoutes);
-    return () => {
-      completeProcessingRouting();
-    };
-  }, [subRoutes, completeProcessingRouting]);
+    return () => {};
+  }, [subRoutes]);
 
   useEffect(() => {
     handleAllRoutes(mapRef, allRoutes);
+    return () => {};
+  }, [allRoutes]);
+
+  useEffect(() => {
     return () => {
       completeProcessingRouting();
     };
-  }, [allRoutes, completeProcessingRouting]);
+  }, [statusRouting, completeProcessingRouting]);
 
   return <div className="webmap" ref={mapRef} />;
 };

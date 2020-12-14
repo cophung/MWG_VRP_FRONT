@@ -71,34 +71,6 @@ const convertDataMatchFormTable = (routes) => {
   return newRoutes;
 };
 
-const convertDataDepotMatchFormTable = (routes, dataInRow) => {
-  const depot = routes[0][0];
-  const { id, place } = depot;
-  const { weight, long, lat, serviceTime, timeWindow } = depot.order;
-
-  const cloneDepot = {
-    id,
-    name: "Kho",
-    place,
-    weight,
-    serviceTime,
-    timeWindow,
-    long,
-    lat,
-  };
-
-  const temponaryRoutes = dataInRow.routes.map((item) => {
-    const order = _.omit(item, ["key"]);
-    const { timeWindow } = order;
-    order.timeWindow = timeWindow.split("-").map(Number);
-    return order;
-  });
-
-  const resultRoutes = [cloneDepot, ...temponaryRoutes, cloneDepot];
-
-  return resultRoutes;
-};
-
 function DrawerRoutes({
   routes,
   handleSubRoute,
@@ -130,8 +102,7 @@ function DrawerRoutes({
             block={true}
             onClick={() => {
               processingRouting();
-              const a = [...routes]; //xet tam
-              handleRoutes(a);
+              handleRoutes(routes);
             }}
           >
             Xem tất cả
@@ -142,13 +113,9 @@ function DrawerRoutes({
         <Button
           type="primary"
           block={true}
-          loading={false}
           onClick={() => {
+            const temponaryRoutes = routes[index.key - 1];
             processingRouting();
-            const temponaryRoutes = convertDataDepotMatchFormTable(
-              routes,
-              record
-            );
             handleSubRoute(temponaryRoutes);
           }}
         >
