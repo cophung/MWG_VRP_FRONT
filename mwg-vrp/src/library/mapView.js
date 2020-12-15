@@ -5,10 +5,13 @@ const serviceProxy =
 const baseMap = "streets-navigation-vector";
 const centerMap = [106.775174, 10.847981];
 
-const randomColorRgba = () => {
+const randomColorRgba = (rgba) => {
   const r = () => (Math.random() * 256) >> 0;
-  const color = `rgba(${r()}, ${r()}, ${r()}, 0.3)`;
-  return color;
+  if (rgba === "RGBA") {
+    return [r(), r(), r(), 0.3];
+  } else {
+    return [r(), r(), r()];
+  }
 };
 
 const handlePopupTemplate = (kind) => {
@@ -62,7 +65,7 @@ const handlePopupTemplate = (kind) => {
   }
 };
 
-const handlePointSymbol = (kind, index) => {
+const handlePointSymbol = (kind, index, color) => {
   switch (kind) {
     case "depot":
       return {
@@ -83,7 +86,7 @@ const handlePointSymbol = (kind, index) => {
     case "customer":
       return {
         type: "text",
-        color: "yellowgreen",
+        color: color ? color : "yellowgreen",
         haloColor: "black",
         haloSize: "1px",
         text: index,
@@ -101,12 +104,12 @@ const handlePointSymbol = (kind, index) => {
   }
 };
 
-const handleRouteSymbol = () => {
+const handleRouteSymbol = (color = [0, 0, 255, 0.3]) => {
   return {
     type: "simple-line",
     join: "bevel",
     cap: "butt",
-    color: [0, 0, 255, 0.3],
+    color,
     width: 4,
   };
 };
@@ -212,10 +215,11 @@ export const handleSubRoutes = (mapRef, subRoutes) => {
             popupTemplate,
           });
 
-          //Khong them trung lap depot
+          //Khong them trung lap depot point
           if (index !== subRoutes.length - 1) {
             routeLayer.add(stop);
           }
+
           routeParams.stops.features.push(stop);
         });
 
@@ -261,18 +265,6 @@ export const handleAllRoutes = (mapRef, routes) => {
     ]) => {
       let routeTask = new RouteTask({ url: serviceProxy });
       let routeLayer = new GraphicsLayer();
-      let routeParams = new RouteParameters({
-        stops: new FeatureSet(),
-        outSpatialReference: {
-          wkid: 3857,
-        },
-      });
-      let routeParams1 = new RouteParameters({
-        stops: new FeatureSet(),
-        outSpatialReference: {
-          wkid: 3857,
-        },
-      });
 
       const map = new ArcGISMap({
         basemap: baseMap,
@@ -285,63 +277,58 @@ export const handleAllRoutes = (mapRef, routes) => {
         zoom: 10,
       });
 
-      const pointDepot = () => {
-        const { id, name, place } = routes[0][0];
-        const {
-          long,
-          lat,
-          serviceTime,
-          timeWindow,
-          weight,
-        } = routes[0][0].order;
-
-        const symbol = {
-          type: "text",
-          color: "yellowgreen",
-          haloColor: "black",
-          haloSize: "1px",
-          text: "Kho",
-          xoffset: 3,
-          yoffset: 3,
-          font: {
-            size: 14,
-            outline: 0,
-            family: "sans-serif",
-            weight: "bold",
-          },
-        };
-
-        const geometry = {
-          type: "point",
-          longitude: long,
-          latitude: lat,
-        };
-
-        const stop = new Graphic({
-          geometry,
-          symbol,
-        });
-
-        routeLayer.add(stop);
-      };
-
-      const showRoute = (data) => {
-        let routeResult = data.routeResults[0].route;
-        routeResult.symbol = {
-          type: "simple-line",
-          join: "bevel",
-          cap: "butt",
-          color: randomColorRgba(),
-          width: 4,
-        };
-        routeLayer.add(routeResult);
-      };
+      let routeParams = new RouteParameters({
+        stops: new FeatureSet(),
+        outSpatialReference: {
+          wkid: 3857,
+        },
+      });
 
       if (routes.length !== 0) {
-        pointDepot();
+        //Add depot point
+        (function handleAddDepotPointToLayer() {
+          const { name } = routes[0][0];
+          const {
+            long,
+            lat,
+            serviceTime,
+            timeWindow,
+            weight,
+          } = routes[0][0].order;
+
+          const popupTemplate = handlePopupTemplate("depot");
+
+          const symbol = handlePointSymbol("depot");
+
+          const pointAtt = handlePointAtt(
+            "depot",
+            name,
+            weight,
+            serviceTime,
+            timeWindow
+          );
+
+          const geometry = {
+            type: "point",
+            longitude: long,
+            latitude: lat,
+          };
+
+          const stop = new Graphic({
+            geometry,
+            symbol,
+            attributes: pointAtt,
+            popupTemplate,
+          });
+
+          routeLayer.add(stop);
+        })();
+
+        //Add customer point and routes
         routes.forEach((currentRoute, index) => {
+          const colorPoint = randomColorRgba();
           currentRoute.forEach((subCurrentRoute, subIndex) => {
-            const { id, name, place } = subCurrentRoute;
+            const { name } = subCurrentRoute;
             const {
               long,
               lat,
@@ -350,21 +337,15 @@ export const handleAllRoutes = (mapRef, routes) => {
               weight,
             } = subCurrentRoute.order;
 
-            const symbol = {
-              type: "text",
-              color: "yellowgreen",
-              haloColor: "black",
-              haloSize: "1px",
-              text: name,
-              xoffset: 3,
-              yoffset: 3,
-              font: {
-                size: 14,
-                outline: 0,
-                family: "sans-serif",
-                weight: "bold",
-              },
-            };
+            const popupTemplate = handlePopupTemplate("customer");
+            const symbol = handlePointSymbol("customer", index + 1, colorPoint);
+            const pointAtt = handlePointAtt(
+              "customer",
+              name,
+              weight,
+              serviceTime,
+              timeWindow
+            );
 
             const geometry = {
               type: "point",
@@ -375,6 +356,8 @@ export const handleAllRoutes = (mapRef, routes) => {
             const stop = new Graphic({
               geometry,
               symbol,
+              attributes: pointAtt,
+              popupTemplate,
             });
 
             if (subIndex !== 0 && subIndex !== currentRoute.length - 1) {
@@ -383,6 +366,18 @@ export const handleAllRoutes = (mapRef, routes) => {
             routeParams.stops.features.push(stop);
           });
         });
+
+        const showRoute = (data) => {
+          let routeResult = data.routeResults[0].route;
+          routeResult.symbol = {
+            type: "simple-line",
+            join: "bevel",
+            cap: "butt",
+            color: [0, 0, 255, 0.3],
+            width: 5,
+          };
+          routeLayer.add(routeResult);
+        };
 
         routeTask.solve(routeParams).then(showRoute);
       }
