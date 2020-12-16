@@ -5,7 +5,7 @@ import reducerFetchRoutes from "./reducerFetchRoutes";
 import reducerFetchOrders from "./reducerFetchOrders";
 import reducerSubRoutes from "./reducerSubRoutes";
 import reducerAllRoutes from "./reducerAllRoutes";
-import { statusRouting } from "./reducerStatus";
+import { statusRouting, routeNumberProcessed } from "./reducerStatus";
 
 const rootReducer = combineReducers({
   reducerTest,
@@ -14,6 +14,7 @@ const rootReducer = combineReducers({
   reducerSubRoutes,
   reducerAllRoutes,
   statusRouting,
+  routeNumberProcessed,
 });
 
 export default rootReducer;

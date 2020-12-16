@@ -6,6 +6,7 @@ import {
   actionSubRoutes,
   actionRoutes,
   processingRouting,
+  routeNumberProcessed,
 } from "../../actions/actionRoutes";
 
 const mapStateToProps = (state) => {
@@ -22,12 +23,14 @@ const mapDispatchToProps = (dispatch) => {
     },
     handleSubRoute: (data) => {
       dispatch(actionSubRoutes(data));
+      dispatch(actionRoutes([]));
     },
     handleRoutes: (data) => {
       dispatch(actionRoutes(data));
     },
-    processingRouting: () => {
+    processingRouting: (number) => {
       dispatch(processingRouting());
+      dispatch(routeNumberProcessed(number));
     },
   };
 };

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Layout } from "antd";
 
 import "../../css/Header.css";
-import MenuItems from "./MenuItems";
+import MenuItems from "../../containers/Header/MenuItems";
 import DrawerOrders from "../../containers/Header/DrawerOrders";
 import DrawerRoutes from "../../containers/Header/DrawerRoutes";
 

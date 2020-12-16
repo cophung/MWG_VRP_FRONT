@@ -101,7 +101,7 @@ function DrawerRoutes({
             type="primary"
             block={true}
             onClick={() => {
-              processingRouting();
+              processingRouting("all");
               handleRoutes(routes);
             }}
           >
@@ -115,7 +115,7 @@ function DrawerRoutes({
           block={true}
           onClick={() => {
             const temponaryRoutes = routes[index.key - 1];
-            processingRouting();
+            processingRouting(index.key);
             handleSubRoute(temponaryRoutes);
           }}
         >

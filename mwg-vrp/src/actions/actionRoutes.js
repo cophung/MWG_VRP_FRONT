@@ -43,3 +43,10 @@ export const completeProcessingRouting = () => {
     type: constantsRoutes.COMPLETE_PROCESSING_ROUTING,
   };
 };
+
+export const routeNumberProcessed = (data) => {
+  return {
+    type: constantsRoutes.ROUTE_NUMBER_PROCESSED,
+    payload: data,
+  };
+};

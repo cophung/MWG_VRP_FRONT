@@ -1,8 +1,8 @@
 import React from "react";
-import { Menu } from "antd";
+import { Menu, Badge } from "antd";
 import { DropboxOutlined, EnterOutlined } from "@ant-design/icons";
 
-function MenuItems({ handleTabOrders, handleTabRoutes }) {
+function MenuItems({ routeNumberProcessed, handleTabOrders, handleTabRoutes }) {
   return (
     <Menu theme="light" mode="horizontal">
       <Menu.Item
@@ -19,7 +19,7 @@ function MenuItems({ handleTabOrders, handleTabRoutes }) {
         icon={<EnterOutlined />}
         onClick={handleTabRoutes}
       >
-        Routes
+        <Badge count={routeNumberProcessed}>Routes</Badge>
       </Menu.Item>
     </Menu>
   );
