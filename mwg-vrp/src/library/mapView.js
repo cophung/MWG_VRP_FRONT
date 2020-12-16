@@ -124,6 +124,14 @@ const handlePointAtt = (...param) => {
   };
 };
 
+const handleGeometry = (longitude, latitude, type = "point") => {
+  return {
+    type,
+    longitude,
+    latitude,
+  };
+};
+
 export const handleSubRoutes = (mapRef, subRoutes) => {
   loadModules(
     [
@@ -325,61 +333,61 @@ export const handleAllRoutes = (mapRef, routes) => {
         })();
 
         //Add customer point and routes
-        routes.forEach((currentRoute, index) => {
-          const colorPoint = randomColorRgba();
-          currentRoute.forEach((subCurrentRoute, subIndex) => {
-            const { name } = subCurrentRoute;
-            const {
-              long,
-              lat,
-              serviceTime,
-              timeWindow,
-              weight,
-            } = subCurrentRoute.order;
+        (function addCustomerAndRoutesToMap() {
+          routes.forEach((currentRoute, index) => {
+            const colorPoint = randomColorRgba();
+            currentRoute.forEach((subCurrentRoute, subIndex) => {
+              const { name } = subCurrentRoute;
+              const {
+                long,
+                lat,
+                serviceTime,
+                timeWindow,
+                weight,
+              } = subCurrentRoute.order;
 
-            const popupTemplate = handlePopupTemplate("customer");
-            const symbol = handlePointSymbol("customer", index + 1, colorPoint);
-            const pointAtt = handlePointAtt(
-              "customer",
-              name,
-              weight,
-              serviceTime,
-              timeWindow
-            );
+              const popupTemplate = handlePopupTemplate("customer");
+              const symbol = handlePointSymbol(
+                "customer",
+                index + 1,
+                colorPoint
+              );
+              const pointAtt = handlePointAtt(
+                "customer",
+                name,
+                weight,
+                serviceTime,
+                timeWindow
+              );
+              const geometry = handleGeometry(long, lat);
+              const stop = new Graphic({
+                geometry,
+                symbol,
+                attributes: pointAtt,
+                popupTemplate,
+              });
 
-            const geometry = {
-              type: "point",
-              longitude: long,
-              latitude: lat,
-            };
-
-            const stop = new Graphic({
-              geometry,
-              symbol,
-              attributes: pointAtt,
-              popupTemplate,
+              if (subIndex !== 0 && subIndex !== currentRoute.length - 1) {
+                routeLayer.add(stop);
+              }
+              routeParams.stops.features.push(stop);
             });
-
-            if (subIndex !== 0 && subIndex !== currentRoute.length - 1) {
-              routeLayer.add(stop);
-            }
-            routeParams.stops.features.push(stop);
           });
-        });
 
-        const showRoute = (data) => {
-          let routeResult = data.routeResults[0].route;
-          routeResult.symbol = {
-            type: "simple-line",
-            join: "bevel",
-            cap: "butt",
-            color: [0, 0, 255, 0.3],
-            width: 5,
+          const showRoute = (data) => {
+            let routeResult = data.routeResults[0].route;
+            routeResult.symbol = {
+              type: "simple-line",
+              join: "bevel",
+              cap: "butt",
+              color: randomColorRgba("RGBA"),
+              width: 5,
+            };
+            routeLayer.add(routeResult);
           };
-          routeLayer.add(routeResult);
-        };
 
-        routeTask.solve(routeParams).then(showRoute);
+          routeTask.solve(routeParams).then(showRoute);
+        })();
       }
 
       return () => {
